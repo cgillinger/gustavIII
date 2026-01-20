@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1792: Mordet på Gustav III</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Intro Screen -->
+    <div id="intro-screen" class="screen active">
+        <div class="intro-content">
+            <h1 class="glitch">1792</h1>
+            <h2>Mordet på Gustav III</h2>
+            <div class="intro-text">
+                <p class="dramatic">
+                    Du vaknar med en smäll. Världen snurrar. <br>
+                    <em>Var är du?</em>
+                </p>
+                <p class="dramatic delay-1">
+                    Kylan biter i ansiktet. Lukten av häst och rök fyller luften.<br>
+                    Detta är inte 2026.
+                </p>
+                <p class="dramatic delay-2">
+                    Du tittar ner på din telefon - den är död. Bara en sista notis lyser svagt:<br>
+                    <strong>"TEMPORALT DEPLACEMENT AKTIVERAT. DESTINATION: STOCKHOLM, 14 MARS 1792."</strong>
+                </p>
+                <p class="dramatic delay-3">
+                    <em>Två dagar</em> kvar till mordet på Gustav III.<br>
+                    <em>Två dagar</em> för att ändra historien.<br>
+                    <em>Två dagar</em> för att hitta vägen hem.
+                </p>
+                <p class="dramatic delay-4 warning">
+                    Om du misslyckas... dör en kung. Och du stannar här. För evigt.
+                </p>
+            </div>
+            <div class="name-input-container">
+                <label for="player-name">Vad heter du?</label>
+                <input type="text" id="player-name" placeholder="Ditt namn" autocomplete="off">
+                <button id="start-game">BÖRJA TIDSRESAN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Game Screen -->
+    <div id="game-screen" class="screen">
+        <div class="game-container">
+            <!-- Header with Progress -->
+            <div class="game-header">
+                <div class="progress-container">
+                    <div class="chapter-info">
+                        <span id="chapter-title">KAPITEL 1: ANKOMSTEN</span>
+                        <span id="date-time">14 mars 1792, kl 16:30</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="player-info">
+                    <span id="player-name-display"></span>
+                </div>
+            </div>
+
+            <!-- Achievements Banner -->
+            <div id="achievement-banner" class="achievement-banner hidden">
+                <div class="achievement-content">
+                    <span class="achievement-icon">⭐</span>
+                    <span id="achievement-text"></span>
+                </div>
+            </div>
+
+            <!-- Main Output -->
+            <div id="output" class="output"></div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <span class="prompt">&gt;</span>
+                    <input type="text" id="command-input" placeholder="Vad vill du göra?" autocomplete="off" autofocus>
+                </div>
+                <div class="command-suggestions" id="command-suggestions"></div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="game-controls">
+                <button id="hint-btn" class="control-btn">💡 Ledtråd</button>
+                <button id="inventory-btn" class="control-btn">🎒 Inventarie</button>
+                <button id="help-btn" class="control-btn">❓ Hjälp</button>
+                <button id="save-btn" class="control-btn">💾 Spara</button>
+                <button id="menu-btn" class="control-btn">☰ Meny</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div id="menu-overlay" class="overlay hidden">
+        <div class="menu-content">
+            <h2>Meny</h2>
+            <button class="menu-option" id="resume-btn">Fortsätt spela</button>
+            <button class="menu-option" id="save-game-btn">Spara spel</button>
+            <button class="menu-option" id="load-game-btn">Ladda spel</button>
+            <button class="menu-option" id="restart-btn">Starta om</button>
+            <button class="menu-option" id="credits-btn">Om spelet</button>
+        </div>
+    </div>
+
+    <!-- Help Overlay -->
+    <div id="help-overlay" class="overlay hidden">
+        <div class="help-content">
+            <h2>Hjälp</h2>
+            <div class="help-section">
+                <h3>Grundläggande kommandon:</h3>
+                <ul>
+                    <li><strong>titta</strong> eller <strong>se dig omkring</strong> - Undersök rummet</li>
+                    <li><strong>gå [riktning]</strong> - Gå norrut, söderut, öster, väster, in, ut</li>
+                    <li><strong>undersök [sak]</strong> - Titta närmare på något</li>
+                    <li><strong>ta [sak]</strong> - Plocka upp något</li>
+                    <li><strong>prata med [person]</strong> - Samtala med någon</li>
+                    <li><strong>använd [sak]</strong> - Använd något från ditt inventarie</li>
+                    <li><strong>inventarie</strong> - Se vad du bär på</li>
+                </ul>
+                <h3>Tips:</h3>
+                <ul>
+                    <li>Utforska noggrant - varje rum kan ha ledtrådar</li>
+                    <li>Prata med alla du möter - information är nyckeln</li>
+                    <li>Använd 💡 Ledtråd-knappen om du fastnar</li>
+                    <li>Spelet sparas automatiskt, men du kan spara manuellt också</li>
+                </ul>
+            </div>
+            <button class="close-btn" id="close-help">Stäng</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+    <script src="game-expansion.js"></script>
+    <script src="endings.js"></script>
+    <script src="integration.js"></script>
+    <script src="environmental-storytelling.js"></script>
+    <script src="gustafs-skal-easter-egg.js"></script>
+    <script src="achievements-expanded.js"></script>
+</body>
+</html>
