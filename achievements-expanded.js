@@ -140,6 +140,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 category: 'social'
             };
 
+            Achievements.flower_power = {
+                name: 'Blomstervännen',
+                description: 'Träffade Siri Felice och Mina Leonore - Kohs-Pleyarna på Stortorget',
+                icon: '🌸',
+                category: 'social'
+            };
+
             // ===== EVIDENCE COLLECTION =====
             Achievements.pistol_tracker = {
                 name: 'Vapenexperten',

@@ -123,6 +123,22 @@ if (typeof GameEngine !== 'undefined') {
                 Game.player.questProgress.foundPistolsmith = true;
                 this.updateProgress(15);
             }
+
+            // Special: Get flowers from Siri or Mina
+            if (topic === 'blommor' && (foundChar.id === 'siri_felice' || foundChar.id === 'mina_leonore')) {
+                if (!Game.player.inventory.includes('blommor')) {
+                    Game.player.inventory.push('blommor');
+                    this.output(`<div class="narrator">Siri ler varmt och räcker dig en vacker bukett. "Ta dessa - gratis! För en vänlig själ!"</div>`);
+
+                    // Track meeting the sisters
+                    if (!Game.player.knowledge.includes('met_sisters')) {
+                        Game.player.knowledge.push('met_sisters');
+                        this.unlockAchievement('flower_power');
+                    }
+                } else {
+                    this.output(`<div class="narrator">Du har redan fått blommor av systrarna. Mina vinkar glatt mot dig!</div>`);
+                }
+            }
         } else {
             this.output(`<div class="dialogue">${foundChar.char.name} verkar inte ha något att säga om "${topic}".</div>`);
         }
@@ -184,6 +200,69 @@ if (typeof GameEngine !== 'undefined') {
 
             this.unlockAchievement('access_granted');
             this.updateProgress(20);
+        } else if (foundItem.id === 'blommor') {
+            // Easter egg: Give flowers to characters
+            Game.player.inventory = Game.player.inventory.filter(i => i !== 'blommor');
+
+            const flowerReactions = {
+                'bellman': `Bellman tar emot blommorna med röda ögon.
+
+"Åh! Vackert! Förr i tiden gav jag blommor till en vacker flicka... Ulla Winblad hette hon."
+
+Han luktar på dem och ler vemodigt.
+
+"Tack, min vän. Du har ett gott hjärta."`,
+
+                'siri_felice': `Siri blir rörd!
+
+"Åh, men dessa är JU våra blommor! Du ger tillbaka dem?"
+
+Hon skrattar glatt.
+
+"Du är så snäll! Behåll dem - de är för dig!"
+
+<em>Hon ger tillbaka blommorna.</em>`,
+
+                'mina_leonore': `Mina gör en teatralisk gest!
+
+"Blommor! Som när Romeo gav blommor till Julia! Som när ridddare gav rosor till prinsessor!"
+
+Hon tar emot dem och doftar djupt.
+
+"Tack, ädle riddare! Diana tackar dig!"`,
+
+                'adelaide': `"Åh, vilka vackra blommor! Tack så mycket!"
+
+Adelaide luktar på buketten.
+
+"Ni är mycket galant."`,
+
+                'gustav_iii_dining': `Kungen tar emot blommorna med överraskning.
+
+"Blommor? För mig? Vilken charmant gest!"
+
+Han ler.
+
+"Ni har goda manér, min vän. Jag uppskattar det."`,
+
+                'default': `${foundChar.char.name} tar emot blommorna med ett leende.
+
+"Tack! De är vackra."`
+            };
+
+            const reaction = flowerReactions[foundChar.id] || flowerReactions['default'];
+            this.output(`<div class="dialogue">${reaction}</div>`);
+
+            // Achievement for giving flowers to 3+ people
+            if (!Game.player.flowerGifts) Game.player.flowerGifts = [];
+            if (!Game.player.flowerGifts.includes(foundChar.id)) {
+                Game.player.flowerGifts.push(foundChar.id);
+            }
+
+            // Re-add flowers if given back to Siri
+            if (foundChar.id === 'siri_felice') {
+                Game.player.inventory.push('blommor');
+            }
         } else if (foundItem.id === 'anckarstrom_note' || foundItem.id === 'pistol_list' || foundItem.id === 'dokument') {
             // Giving evidence to king
             if (foundChar.id === 'gustav_iii' || foundChar.id === 'gustav_iii_dining') {

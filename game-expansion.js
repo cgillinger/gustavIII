@@ -68,7 +68,9 @@ Gatan fortsätter norrut mot okända kvarter. Söderut leder den tillbaka mot No
 
 Nu är torget en livlig marknadsplats. Försäljare ropar ut sina varor - fisk, grönsaker, tyg, krukmakeri.
 
-I mitten står en brunn. Barn leker runt den medan deras mödrar handlar.`,
+I mitten står en brunn. Barn leker runt den medan deras mödrar handlar.
+
+Vid en stentrappa sitter två unga flickor omgivna av blomkorgar och ett dragspel. <span class="important">Den äldre spelar musik</span> medan <span class="important">den yngre</span> - klädd i ett märkligt, påkostat kostym - <span class="important">framför något slags teateruppsättning</span> för små barn som samlats runt henne. Deras skratt ekar över torget.`,
 
         exits: {
             'norr': 'köpmangatan',
@@ -76,8 +78,8 @@ I mitten står en brunn. Barn leker runt den medan deras mödrar handlar.`,
             'öster': 'österlånggatan',
             'väster': 'västerlånggatan'
         },
-        items: ['brunn', 'marknadsstånd'],
-        characters: ['fiskhandlare', 'barn'],
+        items: ['brunn', 'marknadsstånd', 'blomkorgar'],
+        characters: ['fiskhandlare', 'barn', 'siri_felice', 'mina_leonore'],
         visited: false
     },
 
@@ -487,6 +489,22 @@ const NewItems = {
         takeable: true,
         useable: true,
         keywords: ['papper', 'brev']
+    },
+
+    blommor: {
+        name: 'vilda blommor',
+        description: 'En vacker bukett med vilda rosor, violer och tusenskönor från Siri och Minas trädgård. De doftar ljuvligt av vår.',
+        takeable: true,
+        useable: false,
+        keywords: ['blomma', 'blommor', 'bukett', 'ros', 'rosor', 'viola', 'violer']
+    },
+
+    blomkorgar: {
+        name: 'blomkorgar',
+        description: 'Två vackra korgar fyllda med färska blommor. Siri och Mina säljer dem för två öre styck.',
+        takeable: false,
+        useable: false,
+        keywords: ['korg', 'korgar', 'blomkorg']
     }
 };
 
@@ -549,6 +567,192 @@ Han tittar misstänksamt på dig.`
             }
         },
         keywords: ['kemist', 'kemisten', 'man']
+    },
+
+    siri_felice: {
+        name: 'Siri Felice',
+        description: 'En 16-årig flicka med dragspel och ett varmt leende',
+        location: 'stortorget',
+        dialogue: {
+            first: `Den äldre flickan slutar spela dragspel och ler mot dig.
+
+"God dag, god herre! Jag är <span class="important">Siri Felice</span>, och detta är min syster <span class="important">Mina Leonore</span>!"
+
+Hon gör en liten bugning. Hennes dragspel glänser i solen.
+
+"Vi uppträder här på torget! Jag spelar musik - dragspel, fiol, flöjt, vad som helst! - och min lilla syster... ja, hon är en <span class="important">Kohs-Pleyare</span>!" Hon säger ordet med stolthet.
+
+"Hon utklär sig som <em>berömda gestalter från historien</em> och framför deras berättelser! Just nu är hon Diana, gudinna av jakten. Igår var hon Jeanne d'Arc!"
+
+Mina, klädd i ett silverfärgat kostym med en leksakspilbåge, vinkar glatt mot dig.
+
+Siri fortsätter: "Vi säljer också blommor om du vill ha? Våra föräldrar odlar dem i trädgården."`,
+
+            repeat: `Siri spelar en glad melodi på sitt dragspel medan Mina gör teatraliska gester för barnen.
+
+"Tack för att du stannade! Musik och berättelser gör världen bättre, tycker jag!"`,
+
+            topics: {
+                'musik': `Siris ögon lyser upp!
+
+"Åh, jag älskar musik! Jag lärde mig dragspel av en gatumusikant när jag var liten, och sedan fortsatte jag själv. Fiol, flöjt, gitarr... jag provar allt!"
+
+Hon spelar en vacker liten melodi.
+
+"Musik kan lätta hjärtat även i mörka tider. Det är därför vi är här - för att sprida glädje!"`,
+
+                'mina': `"Min syster Mina är så kreativ! Hon älskar att klä ut sig och berätta historier. Hon sydde sitt Diana-kostym själv - med min hjälp förstås."
+
+Hon ler stolt.
+
+"Folk kallar henne 'Kohs-Pleyare' - en som spelar/gestaltar kostymer och roller. Barnen älskar henne!"`,
+
+                'kohs-pleyare': `Siri skrattar.
+
+"Ja, 'Kohs-Pleyare'! Vi hittade på ordet tillsammans. Det betyder någon som <em>spelar en kostymerad roll</em> - som teater, fast på gatan!"
+
+"Mina studerar gamla berättelser och historiska personer, sedan gör hon kostymer och uppträder som dem. Hon har varit Diana, Jeanne d'Arc, drottning Kristina, Esther från Bibeln..."
+
+"Barnen tycker det är magiskt!"`,
+
+                'blommor': `"Vi har vilda rosor, violer och tusenskönor! De växer i vår trädgård. Ta gärna några - de är bara två öre!"
+
+<em>Du kan köpa blommor av Siri Felice.</em>`,
+
+                'stockholm': `"Vi älskar Stockholm! Visst är det en härlig stad? Full av liv, musik, berättelser..."
+
+Siri ser lite bekymrad ut.
+
+"Fast det känns... oroligt på sistone. Folk viskar om mörkra ting. Jag hoppas kungen är säker på den där maskeradbalen alla pratar om..."`,
+
+                'balen': `"Åh ja, maskeradbalen på Operan! Hela Stockholm pratar om den. Jag önskar jag kunde gå... men sådana evenemang är bara för adeln."
+
+Hon spelar en drömsk vals på sitt dragspel.
+
+"Men vi kommer spela utanför Operan den kvällen! Kanske hör kungen vår musik genom fönstren?"`,
+
+                'anckarström': `Siri skakar på huvudet.
+
+"Anckarström? Nej, jag känner inte till någon med det namnet. Är det en adelsman?"`,
+
+                'konspiration': `Siri blir allvarlig.
+
+"Konspiration? Det låter farligt... Vi håller oss borta från politik. Vi vill bara sprida glädje med musik och berättelser."
+
+Hon sänker rösten.
+
+"Men jag har hört folk viskas... om missnöjda adelsmän. Det oroar mig."`
+            }
+        },
+        keywords: ['siri', 'felice', 'flicka', 'dragspel', 'musiker', 'syster']
+    },
+
+    mina_leonore: {
+        name: 'Mina Leonore',
+        description: 'En 13-årig flicka i ett självgjort Diana-kostym med leksakspilbåge',
+        location: 'stortorget',
+        dialogue: {
+            first: `Den yngre flickan - klädd i silverfärgat tyg med ett blommigt diadem och en liten pilbåge - springer fram till dig!
+
+"Välkommen, främling! Jag är <span class="important">Mina Leonore</span>, <span class="important">Kohs-Pleyare extraordinär</span>!"
+
+Hon gör en djup teatralisk bugning.
+
+"Just nu gestaltar jag <em>Diana, gudinnan av jakten och månen</em>! Men igår var jag Jeanne d'Arc med rustning och flagga! Och i förrgår var jag drottning Kristina som abdikerade tronen!"
+
+Hennes entusiasm är smittsam. Barnen runt henne fnissar och applåderar.
+
+"Vill du se en föreställning? Eller vill du höra om min <em>konst</em>?"`,
+
+            repeat: `Mina uppträder dramatiskt och citerar från gamla legender medan barnen skrattar och klackar.
+
+"Detta är vad jag lever för! Att berätta historiens stora berättelser!"`,
+
+            topics: {
+                'kohs-pleyare': `Minas ögon strålar!
+
+"Åh, du vill veta! 'Kohs-Pleyare' betyder att jag <em>spelar kostymer</em>! Jag klär ut mig som berömda personer och framför deras berättelser!"
+
+"Det är som teater - men jag är både skådespelare, kostymör och berättare! Jag studerar historiska personer och mytologiska figurer, gör kostymer, och sedan uppträder jag som dem här på torget!"
+
+Hon hoppar upp och ner av entusiasm.
+
+"Igår lärde jag tio barn om Jeanne d'Arc! Idag lär jag dem om Diana! Det är magin med Kohs-Pleyare - att göra historia levande!"`,
+
+                'diana': `Mina pekar på sitt kostym.
+
+"Diana! Romersk gudinna av jakten, månen och djuren! Hon är stolt, oberoende och modig!"
+
+Hon tar upp sin leksakspilbåge och låtsas sikta.
+
+"Hon skyddade oskyldiga djur och straffade grymma jägare. Jag sydde detta silverdiadem själv för att likna hennes måndiadem!"
+
+Hon strålar av stolthet.`,
+
+                'jeanne': `"Jeanne d'Arc! Hon är min favorit!" Mina gestikulerar vilt.
+
+"En bondflicka som blev krigsledare! Hon hörde gudomliga röster och ledde Frankrikes armé till seger! Så modig!"
+
+Hon ser drömsk ut.
+
+"Jag gjorde en rustning av läderpapper och en flagga med liljor. Barnen älskade det!"`,
+
+                'kristina': `"Drottning Kristina av Sverige! Hon regerade Sverige för femtio år sedan!"
+
+Mina sätter sig på trappan och försöker se konungslig ut.
+
+"Hon älskade filosofi och konst mer än att vara drottning, så hon abdikerade - gav upp tronen! Så modig att följa sitt hjärta!"
+
+"Jag gjorde en krona av blommor och en sammetskapla för den rollen."`,
+
+                'historier': `"Jag älskar alla gamla berättelser! Bibliska hjältinnor som Esther och Ruth, mytologiska gudinnor, historiska drottningar..."
+
+Mina räknar på fingrarna.
+
+"Jag har gestaltat Diana, Jeanne d'Arc, Kristina, Artemis, Venus, Ruth från Bibeln... och nästa vecka vill jag prova Kleopatra!"
+
+"Historia är inte tråkigt när man GÖR den levande!"`,
+
+                'siri': `"Min storasyster Siri är bäst! Hon spelar musik medan jag uppträder - det gör allt så mycket vackrare!"
+
+Mina ler mot Siri.
+
+"Hon hjälper mig sy kostymer också. Jag kan inte spela dragspel som hon, men hon kan inte berätta historier som jag - så vi kompletterar varandra perfekt!"`,
+
+                'musik': `"Siri är den musikaliska! Hon kan spela allt - dragspel, fiol, flöjt, gitarr..."
+
+Mina lyssnar en stund på Siris spelande.
+
+"Jag önskar jag kunde det också, men jag är bättre på berättelser och kostymer!"`,
+
+                'blommor': `"Vi säljer blommor som våra föräldrar odlar! De är vackra, eller hur?"
+
+Mina plockar upp en vild ros och luktar på den.
+
+"Bara två öre styck! Perfekt för att ge till någon du tycker om!"`,
+
+                'stockholm': `"Stockholm är världens bästa stad för en Kohs-Pleyare! Så mycket historia, så många berättelser!"
+
+Hon ser sig omkring på torget.
+
+"Vet du att det var här - på detta torg - som Stockholms blodbad hände 1520? Åttiotvå personer avrättade! Så hemskt!"
+
+"Men nu är det en glad plats med barn och blommor."`,
+
+                'anckarström': `Mina skakar på huvudet.
+
+"Anckarström? Nej, jag känner inte den personen. Är det en historisk figur?"`,
+
+                'konspiration': `Mina blir ovanligt allvarlig.
+
+"Konspiration låter kusligt... som något ur en mörk berättelse."
+
+Hon tystnar.
+
+"Jag hoppas ingenting hemskt händer. Stockholm behöver glädje, inte mörkra saker."`
+            }
+        },
+        keywords: ['mina', 'leonore', 'flicka', 'diana', 'kostym', 'kohs-pleyare', 'kohs', 'pleyare', 'syster']
     },
 
     pechlin: {
