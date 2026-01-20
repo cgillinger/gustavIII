@@ -300,6 +300,12 @@ Han ler.
         if (nextRoomId) {
             const nextRoom = Rooms[nextRoomId];
 
+            // Check if room exists
+            if (!nextRoom) {
+                this.output("Det finns inget rum i den riktningen.");
+                return;
+            }
+
             // Check unlock conditions
             if (nextRoom.unlockCondition) {
                 if (nextRoom.unlockCondition === 'chapter2' && Game.player.stats.chapter < 2) {
