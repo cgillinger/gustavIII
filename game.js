@@ -700,7 +700,10 @@ const GameEngine = {
 
         // Add character interaction
         if (room.characters && room.characters.length > 0) {
-            suggestions.push(`prata med ${Characters[room.characters[0]].name.split(' ')[0].toLowerCase()}`);
+            const firstChar = Characters[room.characters[0]];
+            if (firstChar && firstChar.name) {
+                suggestions.push(`prata med ${firstChar.name.split(' ')[0].toLowerCase()}`);
+            }
         }
 
         suggestions.forEach(sug => {
