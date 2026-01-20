@@ -55,7 +55,7 @@ docker run -d -p 8080:80 -v $(pwd):/usr/share/nginx/html:ro nginx
 ### Funktioner:
 - ✅ **Auto-sparning** - Spelet sparas automatiskt efter varje kommando
 - 💡 **Hint-system** - Fastnat? Tryck på "Ledtråd"-knappen
-- ⭐ **8 Achievements** - Lås upp prestationer när du framskrider
+- ⭐ **35+ Achievements** - Lås upp klatschiga prestationer när du spelar!
 - 📊 **Progress tracking** - Se din framgång i progressbaren
 - 💾 **Manuell sparning** - Spara och ladda när du vill
 - ⏰ **Tidssystem** - Tiden förflyter från dag 14→15→16 mars
@@ -155,6 +155,69 @@ Du **varnade utan bevis**. Kungen lyssnade inte. Mordet skedde. Du såg det komm
 
 ...och fler som låses upp!
 
+## 🏆 35+ ACHIEVEMENTS - Samla dem alla!
+
+### 📖 Story Progression
+- 🕰️ **Tidsresenären** - Anlände till 1792
+- 🎭 **Kameleont** - Bytte kläder och smälte in
+- 🔍 **Spårhund** - Började samla ledtrådar
+- 🎯 **Avsläjaren** - Identifierade en konspiratör
+- 🎫 **Balens Gäst** - Fick tillträde till maskeradbalen
+
+### 👑 Victory Achievements
+- 👑 **Hjälten av Stockholm** - Räddade Gustav III
+- ⭐ **Den Lysande Historikern** - Perfect Victory med bevis!
+- ⚔️ **Sekundernas Mästare** - Stoppade mordet i sista sekund
+
+### ⚫ Dark Path
+- ⚫ **Vigilanten** - Tog lagen i egna händer
+- 🗡️ **Förrädaren** - Gick med i konspirationen
+- 💀 **Den Förlorade Tidsresenären** - Fastnade i 1792
+
+### 🗺️ Exploration
+- 🍺 **Krogkännaren** - Besökte alla krogar
+- 🏰 **Hovmannen** - Utforskade Slottet OCH Pechlins palats
+- 🗺️ **Stockholmskännaren** - Besökte alla stadsdelar
+- 🎭 **Operafantomen** - Utforskade hela Operan
+
+### 👥 Social
+- 👥 **Sällskapsmänniskan** - Pratade med 10+ personer
+- 🎵 **Bellmans Kompanjon** - Blev god vän med Bellman
+- 👑 **Kunglig Audiensen** - Talade med Gustav III
+
+### 🔍 Evidence Collection
+- 🔫 **Vapenexperten** - Spårade pistolerna till Wåhlberg
+- 👂 **Spionen** - Avlyssnade Pechlins möte
+- 🔓 **Inbrottstjuven** - Bröt dig in i Anckarströms lägenhet
+- 📜 **Arkivarien** - Samlade alla tre bevisdokument
+
+### ✨ Special
+- 🎶 **Sångmästaren** - Hörde Gustafs skål 3 gånger
+- 🍽️ **Gourmanden** - Smakade all mat och dryck
+- ⏰ **Tidsmästaren** - Upplevde alla tre dagarna
+- 🦉 **Nattugglan** - Var ute efter midnatt
+
+### 🎬 Ending Collection
+- 📖 **Berättelsesökaren** - 2 olika slut
+- 📚 **Historiens Utforskare** - 4 olika slut
+- 🌟 **Ödesvävarens Mästare** - ALLA 6 slut!
+
+### 🎯 Skill-Based
+- ⚡ **Blixtsnabb** - Räddade kungen på <90 min
+- 🧠 **Självständig** - Ingen ledtråd använd
+- 🎯 **Minimalisten** - <100 kommandon
+
+### 🎉 Fun & Easter Eggs
+- 🍻 **Sup med Bellman** - Köpte brännvin till Bellman
+- 🍬 **Sötsaken** - Köpte brända mandlar
+- 👔 **Modeikonen** - Undersökte alla kläder
+- 📄 **Dokumentläsaren** - Läste alla dokument
+
+### ⭐ MASTER
+- 🏆 **GUSTAVIANSK HJÄLTE** - Låste upp ALLA achievements!
+
+**Använd kommandot "achievements" eller "prestationer" i spelet för att se din progress!**
+
 ## 📚 Historisk autenticitet
 
 Spelet är baserat på verkliga händelser och omfattande forskning:
@@ -216,14 +279,15 @@ Spelet är baserat på verkliga händelser och omfattande forskning:
 
 ## 📊 Innehållsstatistik
 
-- **25+ spelplats** med unika beskrivningar
+- **25+ spelplatser** med unika beskrivningar
 - **15+ karaktärer** med dialoger
 - **30+ interaktiva objekt**
-- **8 achievements** att låsa upp
+- **35+ achievements** att låsa upp
 - **6 alternativa slut**
 - **3 kompletta akter**
 - **100+ dialogutbyten**
 - **~15,000 ord** totalt innehåll
+- **Nytt kommando:** "achievements" - Se alla prestationer!
 
 ## 🚀 Vidareutveckling
 
