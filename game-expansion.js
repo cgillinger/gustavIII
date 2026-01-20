@@ -143,6 +143,26 @@ De har inte upptäckt dig än. Du gömmer dig bakom en draperi...`,
         specialEvent: 'conspiracy_meeting'
     },
 
+    fredsgatan: {
+        name: 'Fredsgatan',
+        chapter: 1,
+        description: `En bred gata som löper västerut från Norrmalmstorg. Höga stenhus kantar gatan, och du hör fjärran ljud av hamnen.
+
+Västerut skymtar du <span class="important">Blasieholmen</span> - den exklusiva halvön där stadens rikaste adelsmän bor.
+
+Österut leder gatan tillbaka mot <span class="important">Norrmalmstorg</span> och Operan.
+
+Gatlykter kastar långa skuggor över kullerstenen.`,
+
+        exits: {
+            'öster': 'norrmalmstorg',
+            'väster': 'blasieholmen'
+        },
+        items: [],
+        characters: [],
+        visited: false
+    },
+
     blasieholmen: {
         name: 'Blasieholmen',
         chapter: 2,
@@ -153,7 +173,7 @@ De har inte upptäckt dig än. Du gömmer dig bakom en draperi...`,
 Området är relativt ödsligt. Perfekt för hemliga möten.`,
 
         exits: {
-            'väster': 'fredsgatan',
+            'öster': 'fredsgatan',
             'in': 'pechlin_house'
         },
         items: [],
