@@ -442,6 +442,23 @@ body {
     color: var(--accent-gold);
 }
 
+/* Idle timeout hint pulse animation */
+.control-btn.pulse-hint {
+    animation: hintPulse 1s ease-in-out 4;
+}
+
+@keyframes hintPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+        border-color: var(--border-color);
+    }
+    50% {
+        box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.5);
+        border-color: var(--accent-gold);
+        transform: scale(1.02);
+    }
+}
+
 /* Overlays */
 .overlay {
     position: fixed;
