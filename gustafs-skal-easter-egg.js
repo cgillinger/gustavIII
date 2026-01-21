@@ -201,18 +201,19 @@ Men du känner en kyla... i morgon, om du inte lyckas, kommer dessa män att sö
                 if (parsed.verb === 'lyssna' || parsed.verb === 'listen') {
                     const room = Rooms[Game.player.currentRoom];
 
+                    // Special case: Drabantsalen Gustafs skål easter egg
                     if (Game.player.currentRoom === 'drabant_hall' && room.specialActions && room.specialActions.listen_song) {
                         const result = room.specialActions.listen_song();
                         this.output(result);
                         checkGustafsSkålAchievement();
                         return;
-                    } else {
-                        this.output("Du lyssnar noga... men hör inget särskilt intressant just nu.");
-                        return;
                     }
+
+                    // For all other rooms, let sound-enhancements.js handle it
+                    // (loads at 950ms, after this file)
                 }
 
-                // Call original
+                // Call original for all commands (including lyssna if not drabant_hall)
                 originalProcessCommand.call(this, input);
             };
         }
