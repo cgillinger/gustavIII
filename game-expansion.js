@@ -186,7 +186,7 @@ Västerut skymtar du <span class="important">Blasieholmen</span> - den exklusiva
 
 Österut leder gatan tillbaka mot <span class="important">Norrmalmstorg</span> och Operan.
 
-Gatlykter kastar långa skuggor över kullerstenen.`,
+Gatlyktor kastar långa skuggor över kullerstenen.`,
 
         exits: {
             'öster': 'norrmalmstorg',
