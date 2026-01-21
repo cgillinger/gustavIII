@@ -99,6 +99,40 @@ Du känner igen adressen från Bellmans berättelser - här någonstans ligger <
         visited: false
     },
 
+    köpmangatan: {
+        name: 'Köpmangatan',
+        chapter: 1,
+        description: `En smal medeltida gata som leder norrut från Stortorget. Höga hus med utskjutande övervåningar skapar en tunnel av träfasader.
+
+Gatan är full av butiker - bagare, skomakare, skräddare. Skyltar hänger över dörrarna, knirkande i vinden.
+
+Söderut ser du tillbaka mot <span class="important">Stortorget</span> och dess livliga marknad.`,
+
+        exits: {
+            'syd': 'stortorget'
+        },
+        items: [],
+        characters: [],
+        visited: false
+    },
+
+    västerlånggatan: {
+        name: 'Västerlånggatan',
+        chapter: 1,
+        description: `Gamla stans längsta gata sträcker sig längs den gamla stadsmuren. Fasaderna är målade i varma färger - ockra, rött, brunt.
+
+Här och var öppnar sig gränder mot Riddarfjärden. Du känner vattnets fuktiga luft och hör måsarnas skrik.
+
+Österut leder en smal gränd tillbaka mot <span class="important">Stortorget</span>.`,
+
+        exits: {
+            'öster': 'stortorget'
+        },
+        items: [],
+        characters: [],
+        visited: false
+    },
+
     // DAY 2 (March 15) - Investigation deepens
 
     pechlin_house: {
@@ -276,6 +310,42 @@ En bred trappa leder upp till logerna. Dörrar leder in till huvudsalongen.`,
         },
         items: ['spegel', 'sofa'],
         characters: ['operagäst1', 'operagäst2'],
+        visited: false
+    },
+
+    opera_corridor: {
+        name: 'Operans korridor',
+        chapter: 1,
+        description: `En smal korridor som löper längs operans södra sida. Väggarna är målade i varmt gult.
+
+Härifrån hörs ljud från köket - skrammel av tallrikar, röster av kockar, doften av rostat kött och kryddor.
+
+Till vänster leder korridoren tillbaka mot <span class="important">entrén</span>.`,
+
+        exits: {
+            'vänster': 'opera_entrance'
+        },
+        items: [],
+        characters: [],
+        visited: false
+    },
+
+    opera_main_hall: {
+        name: 'Operans huvudsal',
+        chapter: 1,
+        description: `Du står i själva operasalen - en magnifik sal med balkongloger i flera våningar.
+
+Scenen är enorm, med kulisser och rep som hänger från taket. På golvet ligger markeringar för dansare.
+
+Ljuskronor hänger från taket, väntar på att tändas för kvällens föreställning.
+
+Ut mot <span class="important">foajén</span> leder de stora dörrarna.`,
+
+        exits: {
+            'ut': 'opera_foyer'
+        },
+        items: [],
+        characters: [],
         visited: false
     },
 
@@ -525,6 +595,200 @@ const NewItems = {
         takeable: false,
         useable: false,
         keywords: ['korg', 'korgar', 'blomkorg']
+    },
+
+    // === MISSING ITEMS - SCENERY & ATMOSPHERE ===
+
+    snö: {
+        name: 'snö på marken',
+        description: 'Smältande snö ligger på kullerstenen. Det är en kylig marskväll 1792.',
+        takeable: false,
+        useable: false,
+        keywords: ['snö', 'is']
+    },
+
+    ljuskrona: {
+        name: 'kristallkrona',
+        description: 'En magnifik kristallkrona hänger från taket. Hundratals ljus flimrar i kristallerna.',
+        takeable: false,
+        useable: false,
+        keywords: ['ljuskrona', 'krona', 'kristall', 'ljus']
+    },
+
+    peruk: {
+        name: 'peruk',
+        description: 'En vit pudrad peruk av det senaste modet. Typisk för 1700-talets adelsmän.',
+        takeable: true,
+        useable: true,
+        keywords: ['peruk', 'hår']
+    },
+
+    spegel: {
+        name: 'spegel',
+        description: 'En stor spegel med förgylld ram. Du ser din egen reflektion - fortfarande lite främmande i 1700-talskläder.',
+        takeable: false,
+        useable: false,
+        keywords: ['spegel', 'reflektion']
+    },
+
+    räcke: {
+        name: 'brons räcke',
+        description: 'Ett elegant räcke i brons längs bron. Det är slitet av tusentals händer genom åren.',
+        takeable: false,
+        useable: false,
+        keywords: ['räcke', 'bro']
+    },
+
+    ölstop: {
+        name: 'ölstop',
+        description: 'Ett tjockt lerkrus fyllt med öl. Kondensen rinner längs sidorna.',
+        takeable: false,
+        useable: false,
+        keywords: ['öl', 'ölstop', 'stop', 'krus']
+    },
+
+    meny: {
+        name: 'matsedel',
+        description: 'En trätavla med dagens rätter kritade: "Stekt gädda, kalvstek, ärtsoppa, brännvin".',
+        takeable: false,
+        useable: false,
+        keywords: ['meny', 'matsedel', 'mat']
+    },
+
+    bänk: {
+        name: 'parkbänk',
+        description: 'En enkel träbänk bland träden. Perfekt för att vila fötterna.',
+        takeable: false,
+        useable: false,
+        keywords: ['bänk', 'säte']
+    },
+
+    tavla: {
+        name: 'oljemålning',
+        description: 'En stor oljemålning föreställande ett slag. Soldater i röda uniformer stormar framåt.',
+        takeable: false,
+        useable: false,
+        keywords: ['tavla', 'målning', 'konst']
+    },
+
+    matta: {
+        name: 'persisk matta',
+        description: 'En praktfull matta från Persien. Komplexa mönster i rött, blått och guld.',
+        takeable: false,
+        useable: false,
+        keywords: ['matta', 'persisk']
+    },
+
+    tools: {
+        name: 'verktyg',
+        description: 'Hammare, tänger, filar och andra verktyg för vapensmide. Väl använda och omsorgsfullt underhållna.',
+        takeable: false,
+        useable: false,
+        keywords: ['verktyg', 'hammare', 'tång', 'fil']
+    },
+
+    gatlykta: {
+        name: 'gatlykta',
+        description: 'En järnlykta med flimrande ljus från ett tjockt stearinljus. Den kastar långa skuggor.',
+        takeable: false,
+        useable: false,
+        keywords: ['lykta', 'gatlykta', 'ljus', 'lampa']
+    },
+
+    recept: {
+        name: 'receptbok',
+        description: 'Kemistens anteckningsbok fylld med recept för tinkturer, salvor och färgämnen. Handskriften är prydlig.',
+        takeable: false,
+        useable: false,
+        keywords: ['recept', 'bok', 'anteckningar']
+    },
+
+    brunn: {
+        name: 'stenbrun',
+        description: 'En gammal brunn mitt på torget. Barn leker runt den. Vattnet är klart och kallt.',
+        takeable: false,
+        useable: false,
+        keywords: ['brunn', 'vatten']
+    },
+
+    marknadsstånd: {
+        name: 'marknadsstånd',
+        description: 'Enkla träbås med tyg över. Försäljare ropar ut sina varor - grönsaker, fisk, tyg, krukmakeri.',
+        takeable: false,
+        useable: false,
+        keywords: ['stånd', 'marknadsstånd', 'bås']
+    },
+
+    kartor: {
+        name: 'militärkartor',
+        description: 'Kartor över Stockholm och omgivande landskap. Militära positioner är markerade.',
+        takeable: false,
+        useable: false,
+        keywords: ['karta', 'kartor', 'map']
+    },
+
+    ritningar: {
+        name: 'scenritningar',
+        description: 'Tekniska ritningar för kulisser och scenografi. Detaljerade och noggrant uppmätta.',
+        takeable: false,
+        useable: false,
+        keywords: ['ritning', 'ritningar', 'skiss']
+    },
+
+    färg: {
+        name: 'färgtuber',
+        description: 'Tuber och krukor med olika färger för scenografi. Blått, rött, gult, grönt.',
+        takeable: false,
+        useable: false,
+        keywords: ['färg', 'målarfärg', 'tube']
+    },
+
+    sofa: {
+        name: 'gustaviansk soffa',
+        description: 'En elegant soffa i gustaviansk stil. Klädd i blå siden med vita detaljer.',
+        takeable: false,
+        useable: false,
+        keywords: ['soffa', 'sofa', 'möbel']
+    },
+
+    kikare: {
+        name: 'operakikare',
+        description: 'En liten förgylld kikare för att se scenen närmare. Perfekt för operabesök.',
+        takeable: false,
+        useable: false,
+        keywords: ['kikare', 'tubkikare']
+    },
+
+    supébord: {
+        name: 'supébord',
+        description: 'Ett långt bord täckt av vit linneduk. Kristallglas och silverbestick är prydligt uppdukat.',
+        takeable: false,
+        useable: false,
+        keywords: ['bord', 'supébord', 'matbord']
+    },
+
+    silverkärl: {
+        name: 'silverkärl',
+        description: 'Praktfulla silverkärl med kungens monogram. Polerade till högglans.',
+        takeable: false,
+        useable: false,
+        keywords: ['silver', 'silverkärl', 'skål']
+    },
+
+    porträtt: {
+        name: 'kungaporträtt',
+        description: 'Ett stort porträtt av Gustav III i kunglig skrud. Han ser majestätisk och självsäker ut.',
+        takeable: false,
+        useable: false,
+        keywords: ['porträtt', 'målning', 'tavla']
+    },
+
+    brännvinskrus: {
+        name: 'brännvinskrus',
+        description: 'Grova lerkrus fyllda med brännvin. Lukten är skarp och stickande.',
+        takeable: false,
+        useable: false,
+        keywords: ['krus', 'brännvinskrus', 'brännvin']
     }
 };
 
@@ -955,6 +1219,292 @@ Hon håller upp en strut.
 <span class="narrator">Du äter mandlarna och känner en kort stund av ren lycka mitt i allt kaos.</span>`
         },
         keywords: ['försäljare', 'kvinna', 'mandlar']
+    },
+
+    // === MISSING CHARACTERS - AMBIENTE ===
+
+    vaktpost: {
+        name: 'Vaktpost',
+        description: 'En soldat i kunglig uniform med musköt',
+        location: 'norrmalmstorg',
+        dialogue: {
+            first: `Vaktposten ser strikt på dig.
+
+"God kväll. Håll ordning här på torget. Inga uppror tack!"
+
+Han går vidare på sin patrull.`
+        },
+        keywords: ['vakt', 'vaktpost', 'soldat', 'guard']
+    },
+
+    scenarbetare: {
+        name: 'Scenarbetare',
+        description: 'En man i arbetskläder med såg och hammare',
+        location: 'opera_staff',
+        dialogue: {
+            first: `Scenarbetaren tittar upp från sitt arbete.
+
+"Hej där! Vi bygger kulisser till nästa föreställning. Fantastiskt arbete, men tungt!"
+
+Han torkar svetten från pannan.`
+        },
+        keywords: ['arbetare', 'scenarbetare', 'man']
+    },
+
+    karolin_1: {
+        name: 'Karoliner (veteran)',
+        description: 'Gammal soldat från Karl XII:s tid',
+        location: 'slottsbacken',
+        dialogue: {
+            first: `En gammal man med stoltheten i hållningen, trots åren.
+
+"Jag tjänade under Karl XII, vet du. Poltava... hemska tider. Men vi var modiga!"
+
+Han ser ut i fjärran, minns.`
+        },
+        keywords: ['karoliner', 'veteran', 'soldat', 'karl']
+    },
+
+    karolin_2: {
+        name: 'Karoliner (tiggare)',
+        description: 'Gammal soldat som tigger på backen',
+        location: 'slottsbacken',
+        dialogue: {
+            first: `En trasig veteran sträcker fram handen.
+
+"En skilling, god herre? För en gammal soldat som tjänat kungen..."
+
+Hans ögon är fulla av hopplöshet.`
+        },
+        keywords: ['karoliner', 'tiggare', 'veteran', 'karl']
+    },
+
+    sillgumma: {
+        name: 'Sillgumma',
+        description: 'Gammal kvinna som säljer inlagd sill',
+        location: 'gamla_stan',
+        dialogue: {
+            first: `"Färsk sill! Inlagd sill! Bästa sillen i stan!"
+
+Den gamla kvinnan ropar högt.
+
+"Köp nu, köp nu! Bara två öre tunnan!"`
+        },
+        keywords: ['sillgumma', 'gumma', 'kvinna', 'försäljare']
+    },
+
+    adelsman_1: {
+        name: 'Adelsman i pelskappa',
+        description: 'En ung adelsman med peruk och pelskappa',
+        location: 'den_gyldene_freden',
+        dialogue: {
+            first: `En ung adelsman i dyr pelskappa sitter vid bordet.
+
+"God kväll! Vilken kveld för ett glas vin, eller hur?"
+
+Han höjer sitt glas.`
+        },
+        keywords: ['adelsman', 'adel', 'man', 'pälskappa']
+    },
+
+    adelsman_2: {
+        name: 'Adelsman vid fönstret',
+        description: 'En äldre adelsman med monokel',
+        location: 'den_gyldene_freden',
+        dialogue: {
+            first: `En äldre adelsman betraktar gatan genom sitt monokel.
+
+"Hmm... oroliga tider. Man vet inte vem man kan lita på längre."
+
+Han skakar på huvudet.`
+        },
+        keywords: ['adelsman', 'adel', 'man', 'monokel']
+    },
+
+    tjänare_pechlin: {
+        name: 'Pechlins tjänare',
+        description: 'En diskret man i svart livré',
+        location: 'pechlin_house',
+        dialogue: {
+            first: `Tjänaren ser dig kallt.
+
+"Vem är ni? Ni borde inte vara här. Generalen tar emot ingen just nu."
+
+<span class="warning">Han ser misstänksam ut.</span>`
+        },
+        keywords: ['tjänare', 'betjänt', 'man']
+    },
+
+    von_essen: {
+        name: 'Greve von Essen',
+        description: 'Kungens närmaste vän och rådgivare',
+        location: 'opera_ballroom',
+        dialogue: {
+            first: `Greve von Essen står vid kungens sida.
+
+"En underbar kväll! Kungen är i strålande humör!"
+
+Han ler brett.`
+        },
+        keywords: ['von essen', 'essen', 'greve']
+    },
+
+    lowenhielm: {
+        name: 'Överste Löwenhielm',
+        description: 'Militär och hovman',
+        location: 'opera_ballroom',
+        dialogue: {
+            first: `Överste Löwenhielm står i sin paraduniform.
+
+"En magnifik bal! Men jag håller ögonen öppna. Man kan aldrig vara för försiktig."
+
+Hans hand vilar på sabelgreppet.`
+        },
+        keywords: ['löwenhielm', 'lowenhielm', 'överste']
+    },
+
+    fiskhandlare: {
+        name: 'Fiskhandlare',
+        description: 'En robust kvinna med fiskdisk',
+        location: 'stortorget',
+        dialogue: {
+            first: `"Färsk fisk! Gädda, abborre, strömming!"
+
+Fiskhandlaren ropar över torget.
+
+"Fångad i morse! Kan inte bli fräschare!"`
+        },
+        keywords: ['fiskhandlare', 'kvinna', 'försäljare']
+    },
+
+    barn: {
+        name: 'Barn som leker',
+        description: 'En grupp barn som leker runt brunnen',
+        location: 'stortorget',
+        dialogue: {
+            first: `Barnen springer runt brunnen och skrattar.
+
+Ett barn stannar och tittar nyfiket på dig.
+
+"Varför har du så konstiga kläder?"
+
+Sedan springer hen vidare, skrattande.`
+        },
+        keywords: ['barn', 'unge']
+    },
+
+    vaktpatrull: {
+        name: 'Vaktpatrull',
+        description: 'Två soldater på patrull',
+        location: 'blasieholmen',
+        dialogue: {
+            first: `Två soldater går förbi på patrull.
+
+"God kväll. Håll er till publika områden tack."
+
+De fortsätter sin runda, misstänksamma.`
+        },
+        keywords: ['vakt', 'patrull', 'soldater']
+    },
+
+    operagäst1: {
+        name: 'Dame i siden',
+        description: 'En elegant dam i blå sidenklänning',
+        location: 'opera_foyer',
+        dialogue: {
+            first: `En elegant dam i sidenklänning viftar med sin solfjäder.
+
+"Åh vilken magnifik kväll! Jag ser fram emot föreställningen!"
+
+Hon pratar med sin följeslagare.`
+        },
+        keywords: ['dam', 'kvinna', 'gäst', 'operagäst']
+    },
+
+    operagäst2: {
+        name: 'Herre med käpp',
+        description: 'En äldre herre med promenadkäpp',
+        location: 'opera_foyer',
+        dialogue: {
+            first: `En äldre herre lutar sig mot sin käpp.
+
+"Jag har sett alla stora operor här. Mozart, Gluck... Mästerliga!"
+
+Han ser nostalgisk ut.`
+        },
+        keywords: ['herre', 'man', 'gäst', 'operagäst']
+    },
+
+    slottsvakt: {
+        name: 'Slottsvakt',
+        description: 'Kunglig garde i paraduniform',
+        location: 'slott_courtyard',
+        dialogue: {
+            first: `Vakten står stram i sin paraduniform.
+
+"Halt! Vem går där? Vad är ert ärende vid slottet?"
+
+Hans hand vilar på sabelgreppet.`
+        },
+        keywords: ['vakt', 'slottsvakt', 'garde', 'soldat']
+    },
+
+    hovmarskalk: {
+        name: 'Hovmarskalk',
+        description: 'Hovfunktionär i guldmedalj',
+        location: 'slott_hall',
+        dialogue: {
+            first: `Hovmarskalken ser formellt på dig.
+
+"God dag. Har ni audiens bokad? Nej? Då kan jag tyvärr inte släppa in er."
+
+Han är högtravande men korrekt.`
+        },
+        keywords: ['hovmarskalk', 'marskalk', 'hovman']
+    },
+
+    snickare: {
+        name: 'Snickare',
+        description: 'Hantverkare med verktyg',
+        location: 'klarakvarter',
+        dialogue: {
+            first: `En snickare arbetar på en bänk utanför sin verkstad.
+
+"God dag! Behöver ni något snickrat? Möbler, dörrar, fönster?"
+
+Han håller upp en välgjord stol.`
+        },
+        keywords: ['snickare', 'hantverkare', 'man']
+    },
+
+    piga: {
+        name: 'Piga med tvättkorg',
+        description: 'Ung tjänsteflicka med tvättkorg',
+        location: 'klarakvarter',
+        dialogue: {
+            first: `En ung piga bär en tung tvättkorg.
+
+"Ursäkta, får jag komma förbi?"
+
+Hon ser trött men vänlig ut.`
+        },
+        keywords: ['piga', 'tjänsteflicka', 'flicka']
+    },
+
+    arbetare: {
+        name: 'Hamnarbetare',
+        description: 'Robust man med ärrade händer',
+        location: 'arbetarkrog',
+        dialogue: {
+            first: `En robust hamnarbetare dricker brännvin.
+
+"Hårt jobb vid hamnen. Men någon måste göra det."
+
+Han skrattar bittert.
+
+"Adeln vet inte hur vanligt folk lever."`
+        },
+        keywords: ['arbetare', 'hamnarbetare', 'man']
     }
 };
 

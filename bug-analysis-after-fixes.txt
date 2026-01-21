@@ -1,0 +1,97 @@
+================================================================================
+GUSTAV III TEXT ADVENTURE - BUG ANALYSIS REPORT
+Generated: 2026-01-20T22:09:01.332Z
+================================================================================
+
+INVENTORY SUMMARY:
+  Total Rooms: 35 (Base: 11, Expansion: 26)
+  Total Characters: 41 (Base: 6, Expansion: 35)
+  Total Items: 40 (Base: 6, Expansion: 34)
+
+================================================================================
+1. ROOM EXIT VALIDATION
+================================================================================
+
+✅ All 67 room exits are valid!
+
+================================================================================
+2. CHARACTER REFERENCE VALIDATION
+================================================================================
+
+✅ All 43 character references are valid!
+
+================================================================================
+3. ITEM REFERENCE VALIDATION
+================================================================================
+
+✅ All 36 item references are valid!
+
+================================================================================
+4. UNLOCK CONDITIONS AND REQUIREMENTS
+================================================================================
+
+Found 10 room(s) with unlock conditions:
+
+  Room: "Pechlins palats, Blasieholmen" (pechlin_house)
+    Unlock Condition: chapter2
+
+  Room: "Operasalongen - Maskeradbalen" (opera_ballroom)
+    Unlock Condition: chapter3
+
+  Room: "Wåhlbergs Vapensmedja" (vahlberg_gunsmith)
+    Unlock Condition: learned_about_pistols
+
+  Room: "Blasieholmen" (blasieholmen)
+    Unlock Condition: chapter2
+
+  Room: "Anckarströms bostad, Upplandsgatan" (anckarstrom_residence)
+    Unlock Condition: found_anckarstrom
+
+  Room: "Upplandsgatan" (upplandsgatan)
+    Unlock Condition: found_anckarstrom_address
+
+  Room: "Kungens loge" (king_loge)
+    Unlock Condition: chapter3
+
+  Room: "Drabantsalen" (drabant_hall)
+    Unlock Condition: chapter3
+
+  Room: "Klarakvarteren" (klarakvarter)
+    Unlock Condition: chapter2
+
+  Room: "Järnkällan" (arbetarkrog)
+    Unlock Condition: chapter2
+
+
+================================================================================
+5. ADDITIONAL CHECKS
+================================================================================
+
+✅ All rooms have at least one exit.
+
+⚠️  Found 2 ORPHANED ROOM(S) (not reachable from any other room):
+
+  - "Operasalongen - Maskeradbalen" (opera_ballroom)
+  - "Drabantsalen" (drabant_hall)
+
+✅ All characters are assigned to rooms.
+
+================================================================================
+SUMMARY
+================================================================================
+
+Critical Bugs Found: 0
+  - Missing room exits: 0
+  - Missing characters: 0
+  - Missing items: 0
+
+Warnings: 2
+  - Dead-end rooms: 0
+  - Orphaned rooms: 2
+  - Unassigned characters: 0
+
+================================================================================
+END OF REPORT
+================================================================================
+
+✅ Analysis complete! Report saved to: bug-analysis.txt
