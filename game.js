@@ -848,9 +848,9 @@ const GameEngine = {
 
         this.output(`Du tog ${foundItem.item.name}.`);
 
-        // Special handling for clothes
+        // Special handling for clothes - subtle hint
         if (foundItem.id === 'period_clothes') {
-            this.output(`<div class="important">Du har nu tidsenliga kläder! Använd kommandot "använd kläder" för att byta om.</div>`);
+            this.output(`<div class="narrator">Kläderna känns fina i handen - sidenrocken är mjuk och västen är vackert broderad. Du skulle kunna byta om här.</div>`);
         }
     },
 
