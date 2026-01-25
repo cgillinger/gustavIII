@@ -415,12 +415,185 @@ Han pekar åt vänster.
         }
 
         // ═══════════════════════════════════════════════════════════════════
-        // TA BORT "DU STICKER UT" FRÅN INTRO
+        // SOCIALA KOMMANDON: HÄLSA, SÄG, NICKA, VINKA, etc.
         // ═══════════════════════════════════════════════════════════════════
 
-        // Vi behöver inte ändra intro-texten eftersom NPC-reaktionerna nu
-        // förmedlar detta på ett bättre sätt. Kommentaren finns i
-        // Rooms.norrmalmstorg.description i game.js.
+        if (typeof GameEngine !== 'undefined') {
+            const originalProcessCommand = GameEngine.processCommand;
+
+            GameEngine.processCommand = function(input) {
+                const lowerInput = input.toLowerCase().trim();
+
+                // Sociala kommandon att hantera
+                const socialPatterns = [
+                    // Hälsa
+                    { pattern: /^(hälsa|hälsa på|säg hej|säg hej till|hej på dig)/, verb: 'hälsa' },
+                    // Nicka
+                    { pattern: /^(nicka|nicka till|nicka tillbaka|nicka åt)/, verb: 'nicka' },
+                    // Vinka
+                    { pattern: /^(vinka|vinka till|vinka åt)/, verb: 'vinka' },
+                    // Buga
+                    { pattern: /^(buga|buga för|gör en bugning)/, verb: 'buga' },
+                    // Säg något
+                    { pattern: /^(säg|ropa|skrik)\s+"?([^"]+)"?$/i, verb: 'säg' },
+                    // Le
+                    { pattern: /^(le|le mot|le åt)/, verb: 'le' },
+                    // Tacka
+                    { pattern: /^(tacka|säg tack)/, verb: 'tacka' }
+                ];
+
+                for (let social of socialPatterns) {
+                    if (social.pattern.test(lowerInput)) {
+                        this.handleSocialCommand(social.verb, lowerInput);
+                        return;
+                    }
+                }
+
+                // Inte ett socialt kommando - fortsätt med original
+                return originalProcessCommand.call(this, input);
+            };
+
+            // Hantera sociala kommandon
+            GameEngine.handleSocialCommand = function(verb, input) {
+                const room = Rooms[Game.player.currentRoom];
+                const hasNPCs = room.characters && room.characters.length > 0;
+
+                // Hitta NPC om en nämns i input
+                let targetNPC = null;
+                if (hasNPCs) {
+                    for (let charId of room.characters) {
+                        const char = Characters[charId];
+                        if (char && char.keywords) {
+                            for (let keyword of char.keywords) {
+                                if (input.includes(keyword)) {
+                                    targetNPC = char;
+                                    break;
+                                }
+                            }
+                        }
+                        if (targetNPC) break;
+                    }
+
+                    // Om ingen specifik NPC nämndes, välj den första
+                    if (!targetNPC && room.characters.length > 0) {
+                        targetNPC = Characters[room.characters[0]];
+                    }
+                }
+
+                // Generera svar baserat på verb och om det finns NPC
+                const npcName = targetNPC ? targetNPC.name : null;
+                const npcDesc = targetNPC ? (targetNPC.description || targetNPC.name) : null;
+
+                switch (verb) {
+                    case 'hälsa':
+                        if (targetNPC) {
+                            const responses = [
+                                `${npcName} nickar vänligt tillbaka. "God dag!"`,
+                                `${npcName} ser upp och hälsar. "Goddag, min herre."`,
+                                `${npcName} ler och nickar artigt åt dig.`,
+                                `"God dag!" svarar ${npcName} med en lätt bugning.`,
+                                `${npcName} möter din blick och nickar kort.`
+                            ];
+                            this.output(`<div class="dialogue">${responses[Math.floor(Math.random() * responses.length)]}</div>`);
+                        } else {
+                            this.output(`<div class="narrator">Det finns ingen här att hälsa på.</div>`);
+                        }
+                        break;
+
+                    case 'nicka':
+                        if (targetNPC) {
+                            const responses = [
+                                `${npcName} nickar tillbaka med ett litet leende.`,
+                                `${npcName} besvarar din nick med en egen.`,
+                                `Du nickar och ${npcName} gör likadant.`,
+                                `${npcName} ser din nick och nickar artigt tillbaka.`
+                            ];
+                            this.output(`<div class="dialogue">${responses[Math.floor(Math.random() * responses.length)]}</div>`);
+                        } else {
+                            this.output(`<div class="narrator">Du nickar åt tomma luften. Ingen ser dig.</div>`);
+                        }
+                        break;
+
+                    case 'vinka':
+                        if (targetNPC) {
+                            const responses = [
+                                `${npcName} vinkar tillbaka, lite förvirrat.`,
+                                `${npcName} höjer handen i en hälsning.`,
+                                `${npcName} ser din vinkning och nickar istället.`
+                            ];
+                            this.output(`<div class="dialogue">${responses[Math.floor(Math.random() * responses.length)]}</div>`);
+                        } else {
+                            this.output(`<div class="narrator">Du vinkar. Ingen vinkar tillbaka.</div>`);
+                        }
+                        break;
+
+                    case 'buga':
+                        if (targetNPC) {
+                            const responses = [
+                                `${npcName} ser förvånad ut över din bugning men bugar artigt tillbaka.`,
+                                `"Vilken artig herre!" utbrister ${npcName} och gör en egen bugning.`,
+                                `${npcName} ler och bugar lätt som svar.`
+                            ];
+                            this.output(`<div class="dialogue">${responses[Math.floor(Math.random() * responses.length)]}</div>`);
+                        } else {
+                            this.output(`<div class="narrator">Du bugar djupt för den tomma luften. Ingen imponeras.</div>`);
+                        }
+                        break;
+
+                    case 'säg':
+                        // Extrahera vad som sägs
+                        const sayMatch = input.match(/(säg|ropa|skrik)\s+"?([^"]+)"?$/i);
+                        const message = sayMatch ? sayMatch[2] : 'något ohörbart';
+
+                        if (targetNPC) {
+                            const responses = [
+                                `${npcName} tittar på dig med ett förbryllat uttryck. "Jaså... mja."`,
+                                `"Hmm," svarar ${npcName} och verkar osäker på hur hen ska reagera.`,
+                                `${npcName} hör dig men verkar inte veta vad hen ska säga.`,
+                                `${npcName} nickar långsamt, tydligt osäker på ditt ärende.`
+                            ];
+                            this.output(`<div class="narrator">Du säger "${message}".</div>`);
+                            this.output(`<div class="dialogue">${responses[Math.floor(Math.random() * responses.length)]}</div>`);
+                        } else {
+                            this.output(`<div class="narrator">Du säger "${message}" högt. Orden ekar i rummet, men ingen svarar.</div>`);
+                        }
+                        break;
+
+                    case 'le':
+                        if (targetNPC) {
+                            const responses = [
+                                `${npcName} ler tillbaka, om än lite osäkert.`,
+                                `Ditt leende besvaras med ett lika vänligt från ${npcName}.`,
+                                `${npcName} ser ditt leende och verkar bli på bättre humör.`
+                            ];
+                            this.output(`<div class="dialogue">${responses[Math.floor(Math.random() * responses.length)]}</div>`);
+                        } else {
+                            this.output(`<div class="narrator">Du ler för dig själv. Det känns lite ensamt.</div>`);
+                        }
+                        break;
+
+                    case 'tacka':
+                        if (targetNPC) {
+                            const responses = [
+                                `"Äran är min!" svarar ${npcName} artigt.`,
+                                `${npcName} nickar. "Ingen orsak."`,
+                                `"Det var så lite," säger ${npcName} blygsamt.`,
+                                `${npcName} ler. "Gärna!"`
+                            ];
+                            this.output(`<div class="narrator">Du tackar ${npcName}.</div>`);
+                            this.output(`<div class="dialogue">${responses[Math.floor(Math.random() * responses.length)]}</div>`);
+                        } else {
+                            this.output(`<div class="narrator">Du tackar högt. Ingen svarar.</div>`);
+                        }
+                        break;
+
+                    default:
+                        this.output(`<div class="narrator">Du gör en vänlig gest. ${hasNPCs ? targetNPC.name + ' ser dig men reagerar inte.' : 'Ingen märker det.'}</div>`);
+                }
+            };
+
+            console.log('   ✓ Social commands added (hälsa, nicka, säg, vinka, buga, le, tacka)');
+        }
 
         console.log('');
         console.log('✅ CLOTHING SYSTEM LOADED!');
