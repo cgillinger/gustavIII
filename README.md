@@ -264,6 +264,98 @@ Spelet är baserat på verkliga händelser och omfattande forskning:
 - Responsiv design
 - Cross-browser kompatibel
 
+## 🐛 Debug-läge (för utvecklare)
+
+Debug-läget hjälper till att hitta buggar, ohanterade kommandon och dialog-återvändsgränder.
+
+### Aktivering
+
+Lägg till `?debug` i URL:en:
+```
+index.html?debug
+```
+
+### Debug-panel
+
+När debug-läge är aktiverat visas en panel i nedre högra hörnet med:
+- **Aktuellt rum** - Var spelaren befinner sig
+- **Flaggor** - questProgress, hasModernClothes, etc.
+- **Statistik** - Antal kommandon, ohanterade kommandon
+- **Exportera-knapp** - Ladda ner logg som JSON-fil
+
+### Debug-kommandon (skriv i spelet)
+
+| Kommando | Beskrivning |
+|----------|-------------|
+| `debug help` | Visa alla debug-kommandon |
+| `debug export` | Ladda ner logg som JSON-fil |
+| `debug flags` | Visa alla flaggor i output |
+| `debug unhandled` | Lista kommandon som gav "förstår inte" |
+| `debug stats` | Visa kommandostatistik |
+| `debug clear` | Rensa loggen |
+| `debug teleport [rum]` | Teleportera till ett rum |
+| `debug give [item]` | Ge dig själv ett item |
+| `debug setflag [path=value]` | Sätt en flagga |
+| `debug time [dag:timme]` | Visa/ändra speltid |
+
+### Exporterad loggfil (JSON)
+
+```json
+{
+  "sessionStart": "2026-01-25T12:00:00.000Z",
+  "exportTime": "2026-01-25T13:30:00.000Z",
+  "totalCommands": 42,
+  "unhandledCommands": [
+    "gå till operan",
+    "var kan jag få mat"
+  ],
+  "commandStats": {
+    "gå": 15,
+    "titta": 8,
+    "prata": 5,
+    "undersök": 4
+  },
+  "currentFlags": {
+    "currentRoom": "opera_staff",
+    "questProgress": {
+      "foundClothes": true,
+      "learnedAboutConspiracy": true,
+      "hasEvidence": false
+    },
+    "inventory": ["period_clothes", "ticket"],
+    "hasModernClothes": false
+  },
+  "log": [
+    {
+      "timestamp": "2026-01-25T12:00:05.000Z",
+      "type": "input",
+      "command": "gå norr",
+      "room": "norrmalmstorg"
+    },
+    {
+      "timestamp": "2026-01-25T12:00:05.500Z",
+      "type": "output",
+      "text": "Du står på Norrbro...",
+      "isUnhandled": false
+    },
+    {
+      "timestamp": "2026-01-25T12:01:00.000Z",
+      "type": "unhandled",
+      "command": "var kan jag få mat",
+      "room": "norrbro"
+    }
+  ]
+}
+```
+
+### Användningsområden
+
+- **Hitta ohanterade kommandon** - Se vilka kommandon spelare försöker som inte fungerar
+- **Identifiera dialog-återvändsgränder** - Hitta NPC:er som saknar topics
+- **Spåra quest-progression** - Se om flaggor sätts korrekt
+- **Felsöka navigation** - Kontrollera att rum och exits fungerar
+- **Balansera speltid** - Se hur länge olika delar tar
+
 ## ⏱️ Speltid
 
 **Första genomspelningen:** 2-4 timmar
