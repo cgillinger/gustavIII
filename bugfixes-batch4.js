@@ -292,13 +292,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 const roomKey = `clothing_reaction_${Game.player.currentRoom}`;
                 const alreadyReacted = Game.player.knowledge && Game.player.knowledge.includes(roomKey);
 
-                if (!alreadyReacted && Math.random() < chance && typeof getClothingReaction === 'function') {
+                // SKIP clothing reaction for porter - handled in main dialogue
+                if (foundChar.id === 'portier') {
+                    // Porter has special dialogue, don't add extra reactions
+                }
+                else if (!alreadyReacted && Math.random() < chance && typeof getClothingReaction === 'function') {
                     const reaction = getClothingReaction();
+
+                    // Bestäm pronomen baserat på karaktärsnamn
+                    const name = foundChar.char.name.toLowerCase();
+                    let pronoun = 'personen';
+                    // Manliga titlar/namn
+                    if (name.includes('herr') || name.includes('man') || name.includes('målare') ||
+                        name.includes('portier') || name.includes('adelsman') || name.includes('karolin') ||
+                        name.includes('greve') || name.includes('baron') || name.includes('officer') ||
+                        name.includes('kung') || name.includes('prins') || name.includes('hovman')) {
+                        pronoun = 'han';
+                    }
+                    // Kvinnliga titlar/namn
+                    else if (name.includes('dam') || name.includes('kvinna') || name.includes('fru') ||
+                             name.includes('fröken') || name.includes('grevin') || name.includes('prinsessa') ||
+                             name.includes('drottning')) {
+                        pronoun = 'hon';
+                    }
 
                     if (reaction.type === 'modern') {
                         this.output(`<div class="narrator">Innan samtalet börjar betraktar ${foundChar.char.name} dina kläder med förvirrad min:</div>
 <div class="dialogue whisper">${reaction.text}</div>
-<div class="narrator">Men de skakar av sig det och fortsätter...</div>`);
+<div class="narrator">Men ${pronoun} skakar av sig det och fortsätter...</div>`);
                     } else {
                         this.output(`<div class="dialogue whisper">${reaction.text}</div>`);
                     }

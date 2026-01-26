@@ -102,8 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
 
                     // Check if player can enter (clothing check)
-                    if (nextRoomId === 'opera_foyer' && Game.player.hasModernClothes) {
-                        this.output(`<div class="warning">Portiern stoppade dig. "Inte så där klädd!"</div>`);
+                    // NOTE: Better message handled in bugfixes-batch5.js
+                    if (nextRoomId === 'opera_foyer' && Game.player.hasModernClothes !== false) {
+                        // Let bugfixes-batch5.js handle this with better dialogue
                         return;
                     }
 
