@@ -259,43 +259,12 @@ Doften av lavendel och naftalen fyller luften - kläderna är välbevarade men t
 
         // ═══════════════════════════════════════════════════════════════════
         // HOOK INTO CMDTALK FÖR KLÄD-REAKTIONER
+        // DISABLED: Moved to bugfixes-batch4.js for better NPC detection
         // ═══════════════════════════════════════════════════════════════════
 
-        if (typeof GameEngine !== 'undefined' && GameEngine.cmdTalk) {
-            const originalCmdTalk = GameEngine.cmdTalk;
-
-            GameEngine.cmdTalk = function(target) {
-                // Chans att NPC reagerar på kläder (30% för moderna, 20% för tidsenliga)
-                const hasModernClothes = Game.player.hasModernClothes !== false;
-                const chance = hasModernClothes ? 0.35 : 0.15;
-
-                // Kolla om vi redan visat kläd-reaktion i detta rum
-                const roomKey = `clothing_reaction_${Game.player.currentRoom}`;
-                const alreadyReacted = Game.player.knowledge && Game.player.knowledge.includes(roomKey);
-
-                if (!alreadyReacted && Math.random() < chance) {
-                    const reaction = getClothingReaction();
-
-                    // Visa reaktion INNAN normal dialog
-                    if (reaction.type === 'modern') {
-                        this.output(`<div class="narrator">Innan samtalet börjar betraktar personen dina kläder med förvirrad min:</div>
-<div class="dialogue whisper">${reaction.text}</div>
-<div class="narrator">Men de skakar av sig det och fortsätter...</div>`);
-                    } else {
-                        this.output(`<div class="dialogue whisper">${reaction.text}</div>`);
-                    }
-
-                    // Markera att vi reagerat i detta rum
-                    if (!Game.player.knowledge) Game.player.knowledge = [];
-                    Game.player.knowledge.push(roomKey);
-                }
-
-                // Anropa original
-                return originalCmdTalk.call(this, target);
-            };
-
-            console.log('   ✓ NPC clothing reactions hooked into cmdTalk');
-        }
+        // This functionality is now handled in bugfixes-batch4.js with better
+        // NPC detection (checks if NPC exists before showing reaction)
+        console.log('   ℹ NPC clothing reactions handled by bugfixes-batch4.js');
 
         // ═══════════════════════════════════════════════════════════════════
         // FÖRBÄTTRAD MÅLARE MED KLÄD-REAKTION

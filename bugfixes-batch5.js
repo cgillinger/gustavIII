@@ -69,10 +69,10 @@ Han ler godkännande.
         // FIX 2: BLOCKERA "UPP" MED BÄTTRE MEDDELANDE
         // ═══════════════════════════════════════════════════════════════════
 
-        if (typeof GameEngine !== 'undefined') {
-            const originalMove = GameEngine.cmdMove;
+        if (typeof GameEngine !== 'undefined' && GameEngine.cmdGo) {
+            const originalGo = GameEngine.cmdGo;
 
-            GameEngine.cmdMove = function(direction) {
+            GameEngine.cmdGo = function(direction) {
                 const room = Game.player.currentRoom;
 
                 // Blockera "upp" i opera_entrance med moderna kläder
@@ -87,8 +87,10 @@ Han betraktar dig med en blandning av medlidande och förfäran.
                     return;
                 }
 
-                return originalMove.call(this, direction);
+                return originalGo.call(this, direction);
             };
+
+            console.log('   ✓ Porter blocking message hooked into cmdGo');
         }
 
         // ═══════════════════════════════════════════════════════════════════

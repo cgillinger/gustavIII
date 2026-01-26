@@ -791,8 +791,9 @@ const GameEngine = {
             const nextRoom = room.exits[direction];
 
             // Check if player can enter (clothing check)
-            if (nextRoom === 'opera_foyer' && Game.player.hasModernClothes) {
-                this.output(`<div class="warning">Portiern stoppade dig. "Inte så där klädd!"</div>`);
+            // NOTE: Better message now handled in bugfixes-batch5.js cmdMove hook
+            if (nextRoom === 'opera_foyer' && Game.player.hasModernClothes !== false) {
+                // Defer to bugfixes-batch5.js for better porter dialogue
                 return;
             }
 
