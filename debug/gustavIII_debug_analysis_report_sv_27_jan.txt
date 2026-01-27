@@ -1,0 +1,270 @@
+Analys av debuglogg (JSON) och rekommenderade åtgärder i koden
+Målgrupp: AI-kodare som utvecklar ett textäventyr och nu är i debugfas och behöver detaljerad analys av debuglogg för att veta vad som behöver ses över.
+
+Underlag
+- Debuglogg: gustav3-debug-2026-01-27T09-59-39.json fileciteturn0file0
+- Handbok/principer: “Att bygga ett klassiskt textäventyr 2026 – En handbok för AI-utvecklare” fileciteturn1file0
+
+Översikt av sessionen (förankring i loggen)
+- Sessionstart: 2026-01-27T09:56:36Z; export: 2026-01-27T09:59:39Z fileciteturn0file0
+- Totalt antal kommandon: 23 fileciteturn0file0
+- Kommandon som explicit loggas som “unhandled”: “Vad vet du?” och “från om balen” fileciteturn0file0
+- Progression/flags vid export: currentRoom=opera_workshop, foundClothes=true, inventory innehåller period_clothes, hasModernClothes=false, men questProgress.metAdelcrantz=false trots att knowledge innehåller met_adelcrantz fileciteturn0file0
+
+1) Parser- och kommandotolkning: identifierade fel/inkonsekvenser
+
+1.1 Unhandled-kommandon (hårda missar i parsern)
+Symtom i logg:
+- Spelaren skriver “Vad vet du?” och får standardfallet “Jag förstår inte det kommandot…”; kommandot loggas dessutom som type=unhandled fileciteturn0file0.
+- Spelaren skriver “från om balen” och får samma unhandled-respons; även detta loggas som type=unhandled fileciteturn0file0.
+
+Varför det är ett problem:
+- Handboken lyfter “gissa ordet/verb”-problemet och vikten av synonymstöd och att belöna intentionen hos spelaren fileciteturn1file0. Här är intentionen rimligt tydlig (fråga NPC vad den vet / fråga om balen), men parsern fångar inte upp det.
+
+Rekommenderade förändringar:
+A) Normalisera och kanonisera input före parsing:
+- Lowercase, trim, ta bort skiljetecken, normalisera diakritik vid behov.
+- Ex: “Vad vet du?” → “vad vet du” → matcha mot intent “ask/general” eller “ask/what_do_you_know”.
+
+B) Inför fallback som försöker rädda intentionen innan “unhandled”:
+- Om spelaren är i dialogläge/har aktiv NPC: om input innehåller “vad vet”/”vet du”/”berätta” → route till “fråga [npc] om allmänt” eller visa meny med ämnen.
+
+C) Logga och använd “unhandledCommands” som en förbättrings-loop:
+- Loggen har redan en lista unhandledCommands fileciteturn0file0. Gör detta till en pipeline: varje ny unhandled-fras blir antingen (1) synonym, (2) nytt kommandomönster, eller (3) en bättre kontext-fallback.
+
+1.2 “Fråga …”-kommandon som parsas men semantiskt faller igenom
+Symtom i logg:
+- “Fråga om staden/operan/slottet/komplott” samt “fråga vad adelcrantz vet …” ger i flera fall exakt samma svar: “Jag vet inget om det.” fileciteturn0file0.
+- “fråga om operan” upprepas flera gånger och ger identiskt svar varje gång fileciteturn0file0.
+
+Varför det är ett problem:
+- Handboken rekommenderar meningsfulla felmeddelanden och varierade NPC-svar i stället för monoton “Det vet jag inget om.”-loop fileciteturn1file0.
+- Detta upplevs av spelaren som att spelet inte har “under ytan” och bryter immersion.
+
+Rekommenderade förändringar:
+A) Skilj på tre fall i dialog-routern:
+1) Ämnet finns och NPC har svar → ge svar + eventuellt quest/knowledge.
+2) Ämnet känns “rimligt” för NPC men saknar skrivet svar → ge “rimlig” fallback (t.ex. “Jag kan säga något om byggnaden, men inte om föreställningarna.”).
+3) Ämnet är orimligt för NPC → ge kort, karaktärsdriven avvisning.
+
+B) Variera fallback-svar med rotationslista per NPC:
+- 4–8 variationer som matchar NPC-personlighet.
+- Lägg in en “hjälpande” variant som listar vad som går att fråga om (se 2.3 nedan).
+
+C) Intent-baserad synonymmappning:
+- Map “Fråga om operan” till antingen “byggnaden” eller “verksamheten” beroende på NPC.
+- Ex: Adelcrantz (arkitekt) bör ha topics: operahuset/byggnaden/ritningar/arkitektur; inte nödvändigtvis repertoar. Handboken förespråkar att spelaren inte ska behöva gissa exakt rätt nyckelord fileciteturn1file0.
+
+2) NPC- och dialogsystem: identifierade fel/inkonsekvenser
+
+2.1 Dubbeldialog (duplicerad kläd-reaktion + dialoginnehåll)
+Symtom i logg (Målaren i opera_staff):
+Vid “prata med målaren” händer två saker direkt efter varandra:
+1) En separat “kläd-reaktion” (“Innan samtalet börjar…” + kommentar om skjorta/väst) fileciteturn0file0
+2) Omedelbart efter: huvuddialogen som åter igen kommenterar “Fortfarande i den där märkliga dräkten…” och pekar spelaren mot omklädningsrummet fileciteturn0file0
+
+Vad som är fel:
+- Samma narrativa information levereras två gånger i samma turn.
+- Det ser ut som två oberoende lager triggas: (a) global “react-to-clothes” och (b) NPC:s talk-script, utan deduplicering.
+
+Varför det sannolikt återkommer senare:
+- Om arkitekturen är “global pre-dialog hook” + “NPC-dialog”, och båda får lov att tala, kan samma mönster finnas vid andra NPC:er/rum.
+
+Rekommenderade förändringar (kodstruktur):
+A) Inför ett “ResponsePlan”-lager som bestämmer vad som får skrivas ut per kommando:
+- Samla alla kandidatresponser (clothingReaction, npcDialogue, roomNarration).
+- Kör en prioriterings- och dedup-pass innan output:
+  - Om clothingReaction redan uttrycker X (t.ex. “märkliga kläder”), så ska NPC-dialogen välja en variant utan X (eller tvärtom).
+
+B) Gör kläd-reaktion antingen:
+- (Alternativ 1) en engångsreaktion per NPC (flagga per NPC: reactedToModernClothesOnce)
+- eller (Alternativ 2) en del av NPC-dialogens första repliker (och ta bort global hook)
+
+C) Lägg in test: “no double comment”:
+- Automatiskt test som simulerar PRATA MED NPC med hasModernClothes=true och asserts att endast en klädkommentar förekommer.
+
+2.2 Inkonsekvent klädkommentar (Adelcrantz reagerar som om kläderna vore märkliga efter ombyte)
+Symtom i logg:
+- När spelaren når opera_workshop har hasModernClothes=false fileciteturn0file0.
+- Trots det säger Adelcrantz: “Och dina kläder… är de från något teater experiment?” fileciteturn0file0
+
+Trolig orsak:
+- Dialogtexten är inte villkorad på hasModernClothes, eller så är villkoret felkopplat (eller använder annan flagga än den som faktiskt uppdateras).
+
+Rekommenderade förändringar:
+A) Villkora repliker:
+- Om hasModernClothes=true: kommentera moderna kläder.
+- Om hasModernClothes=false: antingen ingen klädkommentar, eller en ny variant (t.ex. “Ah, ni är klädd för operan.”).
+
+B) Enhetlig “appearance”-källa:
+- Undvik dubbla sanningar (inventory + hasModernClothes + foundClothes). Definiera en funktion getPlayerAttire() som returnerar enum: MODERN / PERIOD / DISGUISED etc.
+
+2.3 Monotona “Jag vet inget om det”-svar (förstör dialogkvalitet och ledtrådning)
+Symtom i logg:
+Adelcrantz ger samma one-liner åtta gånger för olika frågor (staden, operan, slottet, komplott, meta-frågor om vad han vet/kan hjälpa med) fileciteturn0file0.
+
+Varför det är fel enligt handboken:
+- Handboken föreslår unika repliker och att belöna nyfikna spelare; samma standardsvar om och om igen är en välkänd fallgrop fileciteturn1file0.
+- Dessutom: spelaren försöker hitta “rätt ämne” och spelet ger ingen vägledning → “gissa nyckelord”-syndrom fileciteturn1file0.
+
+Rekommenderade förändringar:
+A) När NPC saknar ämne: ge en hint om vilka ämnen som finns
+- Ex: “Jag kan tala om kungen, huset jag ritat och mina ritningar. Fråga mig om något av det.”
+
+B) Skapa ett “topic discovery”-system:
+- När spelaren möter NPC, lägg till topics i UI eller via text (“Du kan fråga om: kungen, operahuset, ritningarna…”).
+- Lås upp topics efter knowledge-entries (handboken rekommenderar kontextuell hjälp/ledtrådning fileciteturn1file0).
+
+C) Skilj på “ask about operan” (byggnaden) och “operan” (föreställningen):
+- Adelcrantz kan svara om byggnaden. Om spelaren menar repertoaren: styr om (“Det där vet jag inte, men jag kan berätta om huset.”).
+
+3) Quest- och state-hantering: identifierade fel/inkonsekvenser
+
+3.1 MetAdelcrantz: knowledge uppdateras men questProgress gör det inte
+Symtom i logg:
+- knowledge innehåller “met_adelcrantz” i slutet fileciteturn0file0.
+- Samtidigt är questProgress.metAdelcrantz fortfarande false i currentFlags fileciteturn0file0.
+
+Varför det är ett problem:
+- Det antyder dubbla system för progression (knowledge vs questProgress) som inte synkas.
+- Risken i senare äventyr: spelaren upplever att de “träffat NPC:n”, men quest-logiken tror inte det och blockerar.
+
+Rekommenderade förändringar:
+A) Bestäm “single source of truth” för “har träffat NPC”
+- Antingen:
+  - metAdelcrantz ska drivas av knowledge (“met_adelcrantz” => metAdelcrantz=true), eller
+  - knowledge är sekundär och questProgress är primär (då ska knowledge sättas från quest).
+- Implementera synk i ett ställe (t.ex. applyKnowledgeSideEffects()).
+
+B) Lägg till ett regressions-test:
+- Efter PRATA MED ADELCRANTZ ska både knowledge och questProgress spegla “met” om det är avsett.
+
+3.2 “Byt om” saknar en tydlig framgångs-output (och ger intryck av dubbel-input)
+Symtom i logg:
+- Två “byt om” inputs kommer i följd fileciteturn0file0.
+- Den andra ger “Du bär redan tidsenliga kläder.” fileciteturn0file0
+- Men det finns ingen tydlig output i loggen som kvitterar första “byt om” som lyckad state transition (hasModernClothes true → false).
+
+Varför det är ett problem:
+- Spelaren får ingen belöning/feedback på en viktig handling. Handboken betonar tydlig feedback och belöna framsteg fileciteturn1file0.
+- Detta driver spelaren att upprepa kommandot (vilket loggen visar).
+
+Rekommenderade förändringar:
+A) När ombyte lyckas: skriv alltid en narrativ bekräftelse
+- Ex: “Du byter om. Plötsligt stirrar ingen längre på dig.”
+
+B) Lägg en “cooldown” på input i UI eller blocka double-submit i spelmotorn
+- Om UI kan skicka dubbla kommandon, inför en per-turn “processing” flag eller queue.
+
+4) Rum, navigation och återkoppling: kontrollpunkter (mindre risk, men viktigt att standardisera)
+
+4.1 Konsekvent exit-lista och text
+I den här loggen ser exits ut att matcha rum korrekt (t.ex. opera_entrance har “ut, upp, höger, vänster” och används så) fileciteturn0file0.
+Men: handboken varnar för “osynliga väggar” och inkonsekventa kartor fileciteturn1file0. Rekommendation för kodgranskning:
+- Validera i byggsteget att varje exit är bijektiv där det ska vara det (A->B via “vänster” innebär B->A via “höger”) om inte avsiktligt.
+- Lägg automatiska tester som går igenom alla rum och checkar att exits pekar på existerande rum.
+
+5) Misstanke om att samma fel finns senare i äventyret: instruktioner för helkod-granskning
+
+För att hitta samma felmönster (t.ex. dubbeldialog) även senare, gör en systematisk kodinspektion med fokus på “lager som kan skriva output”.
+
+5.1 Sök efter dubbla output-källor (arkitektur)
+Mål: hitta alla ställen där output kan produceras för samma kommando.
+Checklista:
+- Finns det “pre hooks” (beforeCommand / beforeTalk) som skriver text?
+- Finns det “post hooks” (afterCommand) som skriver text?
+- Finns det NPC-dialog som också skriver text?
+- Finns det reaktionssystem (kläder, inventory, time-of-day) som skriver text?
+
+Åtgärd:
+- Centralisera output i en output-buffer och gör dedup/priority innan flush.
+
+5.2 Sök efter liknande kläd-reaktioner (pattern)
+- Sök i repo efter strängar/nycklar som “clothing_reaction” eller liknande (loggens knowledge visar “clothing_reaction_opera_staff”) fileciteturn0file0.
+- Sök efter funktioner som triggar på hasModernClothes.
+- Kontrollera att endast en av dem har rätt att skriva.
+
+5.3 Sök efter “Jag vet inget om det.” och andra standardsvar
+- Alla sådana standardsvar bör:
+  1) vara NPC-specifika (personlighet),
+  2) varieras, och
+  3) ofta erbjuda vägledning (“Du kan fråga mig om …”) fileciteturn1file0.
+- Implementera en “unknownTopicResponse(npc, topic, context)” istället för hårdkodade strängar.
+
+5.4 Synk mellan knowledge och questProgress
+- Identifiera alla ställen som sätter knowledge (t.ex. met_adelcrantz) och säkerställ att questProgress/flags uppdateras om de ska.
+- Inför en gemensam “applyEffects” efter varje command-turn som:
+  - uppdaterar derived flags
+  - triggar achievements
+  - triggar questProgress baserat på knowledge/inventory
+
+6) Andra analysen: förbättringar enligt handboken, direkt kopplat till loggens observationer
+
+6.1 Minska “gissa verbet/nyckelordet”
+Koppling till logg:
+- Unhandled “Vad vet du?” och “från om balen” fileciteturn0file0
+- Många försök med “fråga …” som ger noll vägledning fileciteturn0file0
+
+Förslag (handbokens princip: synonymstöd och belöna intentionen) fileciteturn1file0:
+- Utöka synonymlexikon:
+  - “vad vet du / berätta / vad känner du till” → fråga allmänt
+  - “balen / maskerad / föreställningen / kvällen” → samma topic-id
+- Implementera “fuzzy topic match”:
+  - Om spelaren skriver “operan” i Adelcrantz-dialog, matcha mot “operahuset/byggnaden” först.
+
+6.2 Meningsfulla felmeddelanden
+Koppling till logg:
+- Standardsvaret “Jag vet inget om det.” upprepas åtta gånger fileciteturn0file0
+
+Förslag (handboken: informativt/underhållande och kontextuellt) fileciteturn1file0:
+- “Jag vet inget om det.” bör ersättas av:
+  - en karaktärsdriven replik + valbar vägledning
+  - alternativt: fråga tillbaka (“Menar du byggnaden eller föreställningen?”)
+
+6.3 Belöna framsteg och ge tydlig feedback
+Koppling till logg:
+- “byt om” saknar tydlig success-text, vilket leder till upprepning fileciteturn0file0
+
+Förslag (handboken: framstegskänsla och återkoppling) fileciteturn1file0:
+- Skriv framgångstext och gärna en liten world-state konsekvens:
+  - NPC:er slutar kommentera kläder
+  - portiern ändrar ton
+
+6.4 NPC-dialog: undvik monoton fallback och skapa topic-listning
+Koppling till logg:
+- Spelaren testar många topics i följd och får samma svar fileciteturn0file0
+
+Förslag (handboken: undvik ask/tell som frågesport; visa ämnen/meny) fileciteturn1file0:
+- Efter PRATA MED [NPC], visa en kort lista:
+  - “Du kan fråga om: kungen, huset, ritningarna.”
+- Eller: menydialog när spelaren skriver FRÅGA:
+  - “Vad vill du fråga om? (1) Kungen (2) Operahuset (3) …”
+
+6.5 “Beskriv allt som nämns” och konsekvent värld
+Koppling till logg:
+- Den delen ser relativt bra ut i denna session, men samma princip bör gälla konsekvent fileciteturn1file0.
+- Praktiskt i debugfas: kör ett “scenery audit” där du extraherar alla <span class="important">…</span>-objekt och verifierar att de är interaktiva.
+
+7) Konkreta åtgärdsförslag (prioriterad lista)
+
+P0 (bryter spelupplevelsen direkt)
+1) Fix: dubbeldialog (dedup/priority mellan clothingReaction och NPC-dialog) fileciteturn0file0
+2) Fix: Adelcrantz klädkommentar villkoras korrekt av hasModernClothes fileciteturn0file0
+3) Fix: byt om måste ge tydlig success-output + ev. blocka dubbel-submit fileciteturn0file0
+
+P1 (starkt frustrerande för spelare)
+4) Parser: fånga upp “Vad vet du?” som intent (synonymer + normalisering) fileciteturn0file0
+5) NPC fallback: ersätt “Jag vet inget om det.”-spam med varierade, kontextuella svar + topic-listning fileciteturn0file0
+
+P2 (risk för senare blockeringar/buggar)
+6) Synka knowledge vs questProgress (met_adelcrantz vs metAdelcrantz) fileciteturn0file0
+
+8) Förslag på teststrategi i debugfas (kort)
+- “Golden path” test: modern klädsel → hitta kläder → byt om → prata med NPC:er; assert att:
+  - endast en klädkommentar per NPC sker
+  - efter ombyte: inga “moderna kläder”-kommentarer kvar
+- “Parser intent” test: mata in 30 vanligaste varianterna från unhandledCommands/telemetri; assert att minst fallback aktiveras.
+- “Topic coverage” test: fråga om 10 ämnen; assert att NPC svarar varierat och minst en gång visar “vad du kan fråga om”.
+
+Slutnot
+Den här rapporten är strikt baserad på vad som syns i den bifogade debugloggen fileciteturn0file0 och rekommendationerna/principerna i handboken fileciteturn1file0. För att bekräfta rotorsakerna behöver du matcha varje symtom mot motsvarande kodmodul (parser, dialogrouter, reaktionssystem, quest-state sync). Rapportens checklistor är utformade för att hjälpa dig att hitta samma felmönster även i senare delar av äventyret.
